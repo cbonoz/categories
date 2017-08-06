@@ -6,19 +6,21 @@
 
 ## Ok, so how do I interact with Category Game? 
 
-Ok, so how do I interact with Category Game?
+<b>HOW TO PLAY:</b>
 
-* "Alexa, ask Category Game for my portfolio"
-* "Alexa, ask Category Game to buy 100 shares of amazon."
-* "Alexa, ask Category Game to sell 200 shares of tesla."
-* "Alexa, ask Category Game for the current amazon share price"
+* You: "Alexa, open category game"
+* Alexa: "Welcome...do you want to play a game?"
+* You: "Yes"
+* Alexa: "Here are your words: covey, grouse, jackdaw
+* You: "are these cites?"
+* Alexa: "cities is not it. Say another category or ask for a hint"
+* You: "i need a hint"
+* Alexa: "The category starts with the letter b"
+* You: "are these birds?"
+* Alexa: "birds is correct! ...Would you like to play again?
 
-Alexa will respond to all of these requests with responses like these:
+And so on..
 
-* "You currently have 100 amazon, 200 tesla in your account with $25000 in your account, for a net value of $200,000.
-* "Buying 100 amazon will cost $100,000. Continue?" (or 'not enough balance remaining' message)
-* "Selling 200 tesla will yield $60,000. Continue?"
-* "The last regular market price of amazon was $1000."
 
 ### Dev Notes
 

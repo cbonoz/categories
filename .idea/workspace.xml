@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8072a01f-725f-43a7-a992-b596d964ae57" name="Default" comment="" />
+    <list default="true" id="8072a01f-725f-43a7-a992-b596d964ae57" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/wordlists" afterPath="$PROJECT_DIR$/src/wordlists" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -20,16 +23,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="387">
               <caret line="157" column="13" lean-forward="false" selection-start-line="157" selection-start-column="13" selection-end-line="157" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="gaming.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/wordlists/gaming.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -75,11 +68,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="test.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
               <caret line="17" column="28" lean-forward="false" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LICENSE.txt" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/LICENSE.txt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -486,12 +489,12 @@
       <workItem from="1501939020706" duration="11427000" />
       <workItem from="1501985753895" duration="4019000" />
       <workItem from="1501990038995" duration="4023000" />
-      <workItem from="1502033649693" duration="8364000" />
+      <workItem from="1502033649693" duration="8453000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="60053000" />
+    <option name="totallyTimeSpent" value="60142000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="873" extended-state="6" />
@@ -538,14 +541,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/wordlists/nouns/gaming.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/wordlists/nouns/food.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -945,6 +940,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="17" column="28" lean-forward="false" selection-start-line="17" selection-start-column="28" selection-end-line="17" selection-end-column="28" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/LICENSE.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
