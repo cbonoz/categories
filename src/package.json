@@ -1,0 +1,23 @@
+{
+  "name": "skill-sample-nodejs-fact-i18n",
+  "version": "1.0.0",
+  "description": "I18n version of fact skill.",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "alexa",
+    "skill",
+    "fact"
+  ],
+  "author": "Amazon.com",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "alexa-sdk": "^1.0.6",
+    "fs": "0.0.1-security",
+    "jest": "^20.0.4",
+    "pluralize": "^6.0.0",
+    "string-similarity": "^1.2.0"
+  }
+}

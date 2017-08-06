@@ -1,0 +1,40 @@
+{
+  "intents": [
+    {
+      "intent": "LaunchRequest"
+    },
+    {
+      "intent": "WordsIntent"
+    },
+    {
+      "intent": "HintIntent"
+    },
+    {
+      "intent": "SessionEndedIntent"
+    },
+    {
+      "intent": "CategoryGuessIntent",
+      "slots": [
+        {
+          "name": "Category",
+          "type": "CATEGORY"
+        }
+      ]
+    },
+    {
+      "intent": "AMAZON.HelpIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "AMAZON.CancelIntent"
+    },
+    {
+      "intent": "AMAZON.YesIntent"
+    },
+    {
+      "intent": "AMAZON.NoIntent"
+    }
+  ]
+}

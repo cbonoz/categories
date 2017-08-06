@@ -1,0 +1,15 @@
+CategoryGuessIntent {Category}
+CategoryGuessIntent is it {Category}
+CategoryGuessIntent how about {Category}
+CategoryGuessIntent could it be {Category}
+
+HintIntent hint
+HintIntent could i have a hint
+HintIntent could you give me a hint
+HintIntent i need a hint
+
+WordsIntent words
+WordsIntent could i hear the words again
+WordsIntent what were the category words
+WordsIntent i need the words again
+
