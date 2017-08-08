@@ -13,13 +13,12 @@ const categories = require('./categories');
 const APP_ID = 'amzn1.ask.skill.53372c18-be27-4a0a-b4ff-7ed7687ba667';
 
 const APP_NAME = 'Category Game';
-const WELCOME_TEXT = `Welcome to the ${APP_NAME}`;
+const WELCOME_TEXT = `Welcome to the ${APP_NAME}. `;
 const HELP_TEXT = "I will think of a one or two word category, I will give you three words in that category " +
-    "and you have to try to guess it. Say 'hint' at any time for a hint, or 'words' for me to say the words again." +
-    " Do you want to start?";
-const CATEGORY_PROMPT = "Try guessing a category.";
-const CATEGORY_REPROMPT = "Try guessing another category";
-const HINT_TEXT = "Guess another category, or say 'hint' for a hint";
+    "and you have to try to guess it. Say 'hint' at any time for a hint, or 'repeat the words' for me to say the words again." +
+    " Do you want to start? ";
+const CATEGORY_AND_WORDS_PROMPT = "Try guessing a category, or say 'repeat the words' for the words again. ";
+const CATEGORY_PROMPT = "Try guessing another category. ";
 const EXIT_TEXT = "Goodbye!";
 
 //=========================================================================================================================================
@@ -39,13 +38,16 @@ const newSessionHandlers = {
             this.attributes['gamesWon'] = 0;
         }
         this.handler.state = states.STARTMODE;
-        this.emit(':ask', WELCOME_TEXT + `You have played ${this.attributes['gamesPlayed']} times ` +
-            `with ${this.attributes['gamesWon']} wins. Would you like to play? Say yes to start the game or no to quit.`);
+        const winText = this.attributes['gamesPlayed'] > 0 ?
+            `You have played ${this.attributes['gamesPlayed']} times and have ${this.attributes['gamesWon']} wins.` :
+            '';
+
+        this.emit(':ask', WELCOME_TEXT + winText + ` Would you like to play? Say yes to start the game or no to quit.`);
     },
-    "AMAZON.StopIntent": function() {
+    "AMAZON.StopIntent": function () {
         this.emit(':tell', EXIT_TEXT);
     },
-    "AMAZON.CancelIntent": function() {
+    "AMAZON.CancelIntent": function () {
         this.emit(':tell', EXIT_TEXT);
     },
     'SessionEndedRequest': function () {
@@ -59,26 +61,28 @@ const startGameHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
     'NewSession': function () {
         this.emit('NewSession'); // Uses the handler in newSessionHandlers
     },
-    'AMAZON.HelpIntent': function() {
+    'AMAZON.HelpIntent': function () {
         this.emit(':ask', HELP_TEXT, HELP_TEXT);
     },
-    'AMAZON.YesIntent': function() {
+    'AMAZON.YesIntent': function () {
         this.attributes["category"] = categories.getRandomCategory();
         this.attributes["categoryWords"] = categories.getRandomWordsForCategory(this.attributes["category"], 3);
         this.handler.state = states.GUESSMODE;
+        this.attributes['guessTries'] = 0;
+        const wordString = categories.joinCategoryWords(this.attributes['categoryWords']);
         this.emit(':ask',
-            'Great! Listen Carefully: Here are your category words: ' + this.attributes["categoryWords"].join(", ") + ". " + CATEGORY_PROMPT,
-            CATEGORY_PROMPT);
+            `Listen Carefully: Here are your category words: ${wordString}. Try guessing a category`,
+            CATEGORY_AND_WORDS_PROMPT);
     },
-    'AMAZON.NoIntent': function() {
+    'AMAZON.NoIntent': function () {
         this.attributes["category"] = null;
         this.emit(':tell', 'Ok, see you next time!');
     },
-    "AMAZON.StopIntent": function() {
+    "AMAZON.StopIntent": function () {
         console.log("STOPINTENT");
         this.emit(':tell', EXIT_TEXT);
     },
-    "AMAZON.CancelIntent": function() {
+    "AMAZON.CancelIntent": function () {
         console.log("CANCELINTENT");
         this.emit(':tell', EXIT_TEXT);
     },
@@ -87,7 +91,7 @@ const startGameHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
         //this.attributes['endedSessionCount'] += 1;
         this.emit(':tell', EXIT_TEXT);
     },
-    'Unhandled': function() {
+    'Unhandled': function () {
         console.log("UNHANDLED");
         const message = 'Say yes to continue, or no to end the game.';
         this.emit(':ask', message, message);
@@ -99,17 +103,19 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         this.handler.state = '';
         this.emitWithState('NewSession'); // Equivalent to the Start Mode NewSession handler
     },
-    'WordsIntent': function() {
-        const categoryWords = `Here are the category words again: ${this.attributes["categoryWords"].join(", ")}. `;
-        this.emit(':ask', categoryWords + CATEGORY_PROMPT, CATEGORY_REPROMPT)
+    'WordsIntent': function () {
+        const wordString = categories.joinCategoryWords(this.attributes['categoryWords']);
+        const message = `Category words: ${wordString}`;
+        this.emit(':ask', message + CATEGORY_PROMPT, CATEGORY_PROMPT)
     },
-    'HintIntent': function() {
-        this.emit(':ask', getHintForCategory(this.attributes["category"]), CATEGORY_REPROMPT);
-    },
-    'CategoryGuessIntent': function() {
+    'CategoryGuessIntent': function () {
         const guessCategory = parseInt(this.event.request.intent.slots.Category.value);
         const targetCategory = this.attributes["category"];
         console.log('user guessed: ' + guessCategory);
+
+        if (category.toLowerCase() === 'repeat the words') {
+            this.emit('WordsIntent');
+        }
 
         const similarity = categories.getSimilarity(guessCategory, targetCategory);
 
@@ -123,14 +129,14 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         this.emit('Incorrect', guessCategory);
 
     },
-    'AMAZON.HelpIntent': function() {
-        this.emit(':ask', HELP_TEXT, CATEGORY_PROMPT);
+    'AMAZON.HelpIntent': function () {
+        this.emit(':ask', HELP_TEXT, CATEGORY_AND_WORDS_PROMPT);
     },
-    "AMAZON.StopIntent": function() {
+    "AMAZON.StopIntent": function () {
         console.log("STOPINTENT");
         this.emit(':tell', EXIT_TEXT);
     },
-    "AMAZON.CancelIntent": function() {
+    "AMAZON.CancelIntent": function () {
         console.log("CANCELINTENT");
     },
     'SessionEndedRequest': function () {
@@ -138,25 +144,27 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         this.attributes['endedSessionCount'] += 1;
         this.emit(':tell', EXIT_TEXT);
     },
-    'Unhandled': function() {
+    'Unhandled': function () {
         console.log("UNHANDLED");
-        this.emit(':ask', 'Sorry, I didn\'t get that. ' + CATEGORY_PROMPT, CATEGORY_REPROMPT);
+        this.emit(':ask', 'Sorry, I didn\'t get that. ' + CATEGORY_PROMPT, CATEGORY_AND_WORDS_PROMPT);
     }
 });
 
 // These handlers are not bound to a state
 const guessAttemptHandlers = {
-    'Incorrect': function(val) {
-        this.emit(':ask', val + ' is not it.' + HINT_TEXT, CATEGORY_REPROMPT);
+    'Incorrect': function (val) {
+        const hint = getHintForCategory(this.attributes["category"]);
+        const message = `${val} is not it. ${hint}. ${CATEGORY_PROMPT}.`;
+        this.emit(':ask', message, CATEGORY_AND_WORDS_PROMPT);
     },
-    'Correct': function(callback) {
+    'Correct': function (callback) {
         this.handler.state = states.STARTMODE;
         this.attributes['gamesPlayed']++;
         this.attributes['gamesWon']++;
         callback();
     },
-    'Unhandled': function() {
-        this.emit(':ask', 'Sorry, I didn\'t get that.' + HINT_TEXT , HINT_TEXT);
+    'Unhandled': function () {
+        this.emit(':ask', 'Sorry, I didn\'t get that.' + CATEGORY_PROMPT, CATEGORY_AND_WORDS_PROMPT);
     }
 };
 
@@ -164,6 +172,6 @@ exports.handler = function (event, context, callback) {
     const alexa = Alexa.handler(event, context);
     alexa.appId = APP_ID;
     alexa.APP_ID = APP_ID;
-    alexa.registerHandlers(handlers);
+    alexa.registerHandlers(newSessionHandlers, guessModeHandlers, startGameHandlers, guessAttemptHandlers);
     alexa.execute();
 };

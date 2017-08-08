@@ -44,12 +44,12 @@ const library = (function () {
 
     function getHintForCategory(category, hintNumber) {
         const hints = [
-            `The category has ${category.length} letters. `,
-            `The category begins with the letter ${category[0]}. `,
+            `The category has ${category.length} letters.`,
+            `The category begins with the letter ${category[0]}.`,
             `The category is ${pl('word', category.split(' ').length, true)}.`,
             category.split(' ').length === 1 ?
-                `The category ends with the letter ${category[category.length - 1]}. `
-                    : `The second word of the category is ${category.split(' ')[1]}. `,
+                `The category ends with the letter ${category[category.length - 1]}.`
+                    : `The second word of the category is ${category.split(' ')[1]}.`,
         ];
 
         if ((hintNumber === undefined || hintNumber >= hints.length)) {
@@ -65,12 +65,29 @@ const library = (function () {
         return similarity;
     }
 
+    function joinCategoryWords(categories) {
+        const n = categories.length;
+
+        if (n === 1) {
+            return categories[0]
+        }
+
+        let message = "";
+        for (let i = 0; i < n - 1; i++) {
+            message += categories[i] + ", ";
+        }
+
+        message += `and ${categories[n-1]}`;
+        return message;
+    }
+
     return {
         getSimilarity: getSimilarity,
         getFileForCategory: getFileForCategory,
         getHintForCategory: getHintForCategory,
         getRandomCategory: getRandomCategory,
         getRandomWordsForCategory: getRandomWordsForCategory,
+        joinCategoryWords: joinCategoryWords,
         SIMILARITY_THRESHOLD: .75
     };
 

@@ -15,8 +15,6 @@
   "license": "Apache-2.0",
   "dependencies": {
     "alexa-sdk": "^1.0.6",
-    "fs": "0.0.1-security",
-    "jest": "^20.0.4",
     "pluralize": "^6.0.0",
     "string-similarity": "^1.2.0"
   }
