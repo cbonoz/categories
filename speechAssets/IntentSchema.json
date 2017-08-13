@@ -7,9 +7,6 @@
       "intent": "WordsIntent"
     },
     {
-      "intent": "HintIntent"
-    },
-    {
       "intent": "SessionEndedIntent"
     },
     {
