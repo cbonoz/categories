@@ -124,8 +124,14 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         if (similarity >= categories.SIMILARITY_THRESHOLD) {
             // With a callback, use the arrow function to preserve the correct 'this' context
             this.emit('Correct', () => {
-                this.emit(':ask',
-                    `${guessCategory} is correct, in only ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
+                if (similarity === 1.0) {
+                    this.emit(':ask',
+                        `${guessCategory} is right! in only ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
+                } else {
+                    this.emit(':ask',
+                        `${guessCategory}, hmm, I'll give it to you. The precise category is ${targetCategory}` +
+                        `It took you ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
+                }
             });
         }
         this.emit('Incorrect', guessCategory);
