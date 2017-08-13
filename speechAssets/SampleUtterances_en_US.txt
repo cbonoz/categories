@@ -5,3 +5,5 @@ CategoryGuessIntent could it be {Category}
 
 WordsIntent repeat the words
 
+GiveUpIntent i give up
+

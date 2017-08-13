@@ -6,6 +6,9 @@
     {
       "intent": "WordsIntent"
     },
+     {
+      "intent": "GiveUpIntent"
+    },
     {
       "intent": "SessionEndedIntent"
     },

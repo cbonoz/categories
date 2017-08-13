@@ -2,7 +2,10 @@
 <img src="https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexa-skills-kit/tutorials/fact/header._TTH_.png" />
 
 ## What does this app do? 
-* The app will give you three words, you need to guess the category that they share. The categories will be fairly broad, and will be one word, such as: jobs, metals, plants, or containers.
+Category Game is a word game where you need to guess the category or theme that the words share.
+* The app will give you three words, you need to guess the category that they share. 
+The categories will be fairly broad, and will be one word, such as: metals, plants, or containers. 
+I can repeat the category words at any time during the game, simply say 'repeat the words'.
 
 ## Ok, so how do I interact with Category Game? 
 
@@ -13,13 +16,15 @@
 * You: "Yes"
 * Alexa: "Here are your words: covey, grouse, jackdaw
 * You: "are these cities?"
-* Alexa: "cities is not it. Say another category or ask for a hint"
-* You: "i need a hint"
-* Alexa: "The category starts with the letter b"
-* You: "are these birds?"
-* Alexa: "birds is correct! ...Would you like to play again?
+* Alexa: "cities is not it. The category starts with the letter b. Try guessing another category."
+* You: "repeat the words"
+* Alexa: "Here are the words again: covey, grouse, jackdaw. Try guessing another category"
+* You: "birds"
+* Alexa: "birds is exactly right! in only 2 guesses ...Would you like to play again?
 
-And so on..
+And so on...
+
+If you're very close to the target word, but not an exact match, I may also give it to you.
 
 
 ### Dev Notes

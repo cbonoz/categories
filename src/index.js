@@ -19,7 +19,7 @@ const HELP_TEXT = "I will think of a one or two word category, I will give you t
     " Do you want to start? ";
 const CATEGORY_AND_WORDS_PROMPT = "Try guessing a category, or say 'repeat the words' for the words again. ";
 const CATEGORY_PROMPT = "Try guessing another category. ";
-const NEW_GAME_PROMPT = "Would would like to play again?";
+const NEW_GAME_PROMPT = "Would you like to play again?";
 const EXIT_TEXT = "Goodbye!";
 
 //=========================================================================================================================================
@@ -106,13 +106,14 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
     },
     'WordsIntent': function () {
         const wordString = categories.joinCategoryWords(this.attributes['categoryWords']);
-        const message = `Category words: ${wordString}`;
-        this.emit(':ask', message + CATEGORY_PROMPT, CATEGORY_PROMPT)
+        const message = `Here are the words again: ${wordString}. `;
+        this.emit(':ask', message + CATEGORY_PROMPT, CATEGORY_AND_WORDS_PROMPT)
     },
     'CategoryGuessIntent': function () {
         const self = this;
         const guessCategory = this.event.request.intent.slots.Category.value;
         const targetCategory = this.attributes["category"];
+        self.attributes['guessTries']++;
         console.log('user guessed: ' + guessCategory);
 
         if (guessCategory.toLowerCase() === 'repeat the words') {
@@ -120,22 +121,33 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         }
 
         const similarity = categories.getSimilarity(guessCategory, targetCategory);
-
         if (similarity >= categories.SIMILARITY_THRESHOLD) {
             // With a callback, use the arrow function to preserve the correct 'this' context
             this.emit('Correct', () => {
                 if (similarity === 1.0) {
+                    let guesses = self.attributes['guessTries'];
+                    if (guesses > 1) {
+                        guesses += " guesses";
+                    } else {
+                        guesses += " guess";
+                    }
                     this.emit(':ask',
-                        `${guessCategory} is right! in only ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
+                        `${guessCategory} is exactly right! Well done. In only ${guesses}. ${NEW_GAME_PROMPT}`);
                 } else {
                     this.emit(':ask',
-                        `${guessCategory}, hmm, I'll give it to you. The precise category is ${targetCategory}` +
+                        `${guessCategory}, hmm. Close enough! The exact category is ${targetCategory}. ` +
                         `It took you ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
                 }
             });
         }
         this.emit('Incorrect', guessCategory);
 
+    },
+    'GiveUpIntent': function () {
+        this.handler.state = states.STARTMODE;
+        this.attributes['gamesPlayed']++;
+        const message = `Your effort is commendable. The correct category was ${this.attributes['category']}. ${NEW_GAME_PROMPT}`;
+        this.emit(':ask', message, NEW_GAME_PROMPT);
     },
     'AMAZON.HelpIntent': function () {
         this.emit(':ask', HELP_TEXT, CATEGORY_AND_WORDS_PROMPT);
@@ -162,8 +174,17 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
 const guessAttemptHandlers = {
     'Incorrect': function (val) {
         const hint = categories.getHintForCategory(this.attributes["category"]);
-        const message = `${val} is not it. ${hint} ${CATEGORY_PROMPT}`;
-        this.attributes['guessTries']++;
+        let message = '';
+        const numGuesses = this.attributes['guessTries'];
+        if (numGuesses <= 3) {
+            message = `${val} is not it. ${hint} ${CATEGORY_PROMPT}`;
+        } else if (numGuesses === 4) {
+            message = `Still not right, but I believe in you. ${hint} You can say 'I give up' or ${CATEGORY_PROMPT}`;
+        } else if (numGuesses === 10) {
+            message = `This is getting a little ridiculous, but you can keep trying. ${hint} You can say 'I give up' or ${CATEGORY_PROMPT}`;
+        } else {
+            message = `Incorrect. ${hint} You can say 'I give up' or ${CATEGORY_PROMPT}`;
+        }
         this.emit(':ask', message, CATEGORY_AND_WORDS_PROMPT);
     },
     'Correct': function (callback) {
