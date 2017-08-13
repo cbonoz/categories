@@ -19,6 +19,7 @@ const HELP_TEXT = "I will think of a one or two word category, I will give you t
     " Do you want to start? ";
 const CATEGORY_AND_WORDS_PROMPT = "Try guessing a category, or say 'repeat the words' for the words again. ";
 const CATEGORY_PROMPT = "Try guessing another category. ";
+const NEW_GAME_PROMPT = "Would would like to play again?";
 const EXIT_TEXT = "Goodbye!";
 
 //=========================================================================================================================================
@@ -109,11 +110,12 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         this.emit(':ask', message + CATEGORY_PROMPT, CATEGORY_PROMPT)
     },
     'CategoryGuessIntent': function () {
-        const guessCategory = parseInt(this.event.request.intent.slots.Category.value);
+        const self = this;
+        const guessCategory = this.event.request.intent.slots.Category.value;
         const targetCategory = this.attributes["category"];
         console.log('user guessed: ' + guessCategory);
 
-        if (category.toLowerCase() === 'repeat the words') {
+        if (guessCategory.toLowerCase() === 'repeat the words') {
             this.emit('WordsIntent');
         }
 
@@ -122,8 +124,8 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         if (similarity >= categories.SIMILARITY_THRESHOLD) {
             // With a callback, use the arrow function to preserve the correct 'this' context
             this.emit('Correct', () => {
-                this.emit(':ask', guessCategory + 'is correct! Would you like to play a new game?',
-                    'Say yes to start a new game, or no to end the game.');
+                this.emit(':ask',
+                    `${guessCategory} is correct, in only ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
             });
         }
         this.emit('Incorrect', guessCategory);
@@ -153,8 +155,9 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
 // These handlers are not bound to a state
 const guessAttemptHandlers = {
     'Incorrect': function (val) {
-        const hint = getHintForCategory(this.attributes["category"]);
-        const message = `${val} is not it. ${hint}. ${CATEGORY_PROMPT}.`;
+        const hint = categories.getHintForCategory(this.attributes["category"]);
+        const message = `${val} is not it. ${hint} ${CATEGORY_PROMPT}`;
+        this.attributes['guessTries']++;
         this.emit(':ask', message, CATEGORY_AND_WORDS_PROMPT);
     },
     'Correct': function (callback) {
