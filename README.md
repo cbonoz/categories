@@ -2,7 +2,7 @@
 <img src="https://m.media-amazon.com/images/G/01/mobile-apps/dex/alexa/alexa-skills-kit/tutorials/fact/header._TTH_.png" />
 
 ## What does this app do? 
-* The app will give you three words, you need to guess the category that they share.
+* The app will give you three words, you need to guess the category that they share. The categories will be fairly broad, and will be one word, such as: jobs, metals, plants, or containers.
 
 ## Ok, so how do I interact with Category Game? 
 
@@ -12,7 +12,7 @@
 * Alexa: "Welcome...do you want to play a game?"
 * You: "Yes"
 * Alexa: "Here are your words: covey, grouse, jackdaw
-* You: "are these cites?"
+* You: "are these cities?"
 * Alexa: "cities is not it. Say another category or ask for a hint"
 * You: "i need a hint"
 * Alexa: "The category starts with the letter b"
