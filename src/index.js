@@ -8,8 +8,8 @@ const categories = require('./categories');
 // Constants and variable declarations.
 //=========================================================================================================================================
 
-//Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
-//Make sure to enclose your value in quotes, like this: const APP_ID = "amzn1.ask.skill.bb4045e6-b3e8-4133-b650-72923c5980f1";
+// Replace with your app ID (OPTIONAL).  You can find this value at the top of your skill's page on http://developer.amazon.com.
+// Enclose this value in quotes.
 const APP_ID = 'amzn1.ask.skill.53372c18-be27-4a0a-b4ff-7ed7687ba667';
 
 const APP_NAME = 'Category Game';
@@ -34,7 +34,6 @@ const states = {
 const newSessionHandlers = {
     'NewSession': function () {
         if (Object.keys(this.attributes).length === 0) {
-            this.attributes['endedSessionCount'] = 0;
             this.attributes['gamesPlayed'] = 0;
             this.attributes['gamesWon'] = 0;
         }
@@ -53,7 +52,6 @@ const newSessionHandlers = {
     },
     'SessionEndedRequest': function () {
         console.log('session ended!');
-        //this.attributes['endedSessionCount'] += 1;
         this.emit(":tell", EXIT_TEXT);
     }
 };
@@ -89,7 +87,6 @@ const startGameHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
     },
     'SessionEndedRequest': function () {
         console.log("SESSIONENDEDREQUEST");
-        //this.attributes['endedSessionCount'] += 1;
         this.emit(':tell', EXIT_TEXT);
     },
     'Unhandled': function () {
@@ -116,8 +113,14 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
         self.attributes['guessTries']++;
         console.log('user guessed: ' + guessCategory);
 
+        if (guessCategory === undefined || guessCategory === "") {
+            self.emit("Unhandled");
+            return;
+        }
+
         if (guessCategory.toLowerCase() === 'repeat the words') {
-            this.emit('WordsIntent');
+            self.emit('WordsIntent');
+            return;
         }
 
         const similarity = categories.getSimilarity(guessCategory, targetCategory);
@@ -139,9 +142,9 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
                         `It took you ${self.attributes['guessTries']} guesses. ${NEW_GAME_PROMPT}`);
                 }
             });
+        } else {
+            this.emit('Incorrect', guessCategory);
         }
-        this.emit('Incorrect', guessCategory);
-
     },
     'GiveUpIntent': function () {
         this.handler.state = states.STARTMODE;
@@ -161,7 +164,6 @@ const guessModeHandlers = Alexa.CreateStateHandler(states.GUESSMODE, {
     },
     'SessionEndedRequest': function () {
         console.log("SESSIONENDEDREQUEST");
-        this.attributes['endedSessionCount'] += 1;
         this.emit(':tell', EXIT_TEXT);
     },
     'Unhandled': function () {
