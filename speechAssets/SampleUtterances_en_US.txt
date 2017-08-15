@@ -1,9 +1,7 @@
 CategoryGuessIntent {Category}
 CategoryGuessIntent is it {Category}
 CategoryGuessIntent how about {Category}
-CategoryGuessIntent could it be {Category}
 
 WordsIntent repeat the words
 
 GiveUpIntent i give up
-
